@@ -3,15 +3,19 @@ import 'package:test/test.dart';
 import 'package:weber/weber.dart';
 
 void main() {
-  group('A group of tests', () {
-    final awesome = WebServer();
+  group('macros', () {
+    final c1 = Controller1();
 
     setUp(() {
       // Additional setup goes here.
     });
 
-    test('First Test', () {
-      expectThat(awesome).isNotNull;
+    test('has augmented methods', () {
+      expectThat(c1).isNotNull;
+      expectThat(c1.hello).isNotNull;
     });
   });
 }
+
+@Controller()
+class Controller1 {}

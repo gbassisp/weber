@@ -5,7 +5,8 @@
 
 # check if fvm command exists, otherwise use empty string
 FVM_CMD := $(shell command -v fvm 2> /dev/null)
-DART_CMD := $(FVM_CMD) dart
+DART := $(FVM_CMD) dart
+DART_CMD := $(FVM_CMD) dart --enable-experiment=macros 
 
 export PATH := $(HOME)/.pub-cache/bin:$(PATH)
 
@@ -24,12 +25,12 @@ kill:
 .PHONY: publish
 publish: all
 	@echo "Publishing package..."
-	$(DART_CMD) pub publish --force
+	$(DART) pub publish --force
 
 .PHONY: dry-run
 dry-run: kill
 	@echo "Running dry-run..."
-	$(DART_CMD) pub publish --dry-run
+	$(DART) pub publish --dry-run
 
 .PHONY: test
 test:
@@ -44,46 +45,46 @@ test-all:
 .PHONY: coverage
 coverage:
 	@echo "Running tests..."
-	$(DART_CMD) pub global activate coverage
+	$(DART) pub global activate coverage
 	$(DART_CMD) run coverage:test_with_coverage
 	$(MAKE) format_lcov
 
 .PHONY: get
 get:
 	@echo "Getting dependencies..."
-	$(DART_CMD) pub get 
+	$(DART) pub get 
 
 .PHONY: upgrade
 upgrade:
 	@echo "Upgrading dependencies..."
-	$(DART_CMD) pub upgrade
+	$(DART) pub upgrade
 
 .PHONY: downgrade
 downgrade:
 	@echo "Downgrading dependencies..."
-	$(DART_CMD) pub downgrade
+	$(DART) pub downgrade
 
 
 .PHONY: doc
 doc:
 	@echo "Generating documentation..."
-	@$(DART_CMD) doc || echo "Failed to generate documentation - maybe it's dart 2.12?"
+	@$(DART) doc || echo "Failed to generate documentation - maybe it's dart 2.12?"
 
 .PHONY: analyze
 analyze:
 	@echo "Analyzing..."
-	$(DART_CMD) analyze --fatal-infos --fatal-warnings
-	$(DART_CMD) format --set-exit-if-changed .
+	$(DART) analyze --fatal-infos --fatal-warnings
+	$(DART) format --set-exit-if-changed ./lib/weber.dart ./lib/src/stable ./test
 
 .PHONY: fix 
 fix:
-	$(DART_CMD) analyze || echo "Found errors to fix"
-	$(DART_CMD) fix --apply
+	$(DART) analyze || echo "Found errors to fix"
+	$(DART) fix --apply
 
 .PHONY: version
 version:
 	@echo "Checking version..."
-	$(DART_CMD) --version
+	$(DART) --version
 
 
 ### Coverage ###

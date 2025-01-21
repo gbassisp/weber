@@ -1,4 +1,5 @@
 /// Weber is a library for creating web applications.
-library weber;
+library;
 
-export 'src/weber_base.dart';
+export 'src/experimental/macros.dart';
+export 'src/stable/weber_base.dart';
