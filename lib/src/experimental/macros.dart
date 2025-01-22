@@ -3,7 +3,6 @@ import 'package:lean_extensions/dart_essentials.dart';
 import 'package:macros/macros.dart';
 import 'package:weber/src/experimental/macros_abstractions.dart';
 
-// final _controllerBase = Uri.parse('package:weber/weber.dart');
 final _controllerBase = Uri.parse('package:weber/src/stable/controller_base.dart');
 /// annotation to generate a controller class
 macro class Controller implements ClassDeclarationsMacro {
@@ -11,19 +10,19 @@ macro class Controller implements ClassDeclarationsMacro {
   const Controller([this._endpoint = string.empty]);
   final String _endpoint;
   String get _quotedEndpoint => '"$_endpoint"';
-  ClassMember get _serveGet => MethodMember(
-      type: 'void', 
+  ClassMember _getServeGet(MacroBuilder builder) => MethodMember(
+      type: builder.coreTypes.String, 
       name: 'serveGet',
-      body: '{$_quotedEndpoint;}',
+      body: '{return $_quotedEndpoint;}',
   );
-  ClassMember get _controllerAttribute => FieldMember(
-    type: 'String',
+  ClassMember _getControllerAttribute(MacroBuilder builder) => FieldMember(
+    type: builder.coreTypes.String,
     name: 'endpoint',
     value: _quotedEndpoint,
   );
   ClassMember _getControllerBase(Identifier controllerBase) => 
     SimpleIdentifiedFieldMember(
-      typeIdentifier: controllerBase,
+      type: controllerBase,
       name: 'controller',
     );
   
@@ -40,9 +39,9 @@ macro class Controller implements ClassDeclarationsMacro {
     final _ = _getControllerBase(controller);
 
     macroBuilder
-    ..addMember(_serveGet)
+    ..addMember(_getServeGet(macroBuilder))
     // ..addMember(_getControllerBase(controller))
-    ..addMember(_controllerAttribute);
+    ..addMember(_getControllerAttribute(macroBuilder));
   }
 }
 

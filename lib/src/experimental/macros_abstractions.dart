@@ -23,9 +23,18 @@ class MacroBuilder {
     final fields = await _builder.fieldsOf(_clazz);
     final fieldsString = fields.map((f) => f.identifier.name).toList();
     _membersNames = fieldsString;
+    await _loadCoreTypes();
+  }
+
+  Future<void> _loadCoreTypes() async {
+    final core = Uri.parse('dart:core');
+    final String = await loadPackage(core, 'String');
+    _coreTypes = CoreTypes(String: String);
   }
 
   List<String> _membersNames = [];
+  CoreTypes? _coreTypes;
+  CoreTypes get coreTypes => _coreTypes!;
 
   /// safely adds a new [ClassMember] to the class
   void addMember(ClassMember member) {
@@ -43,10 +52,16 @@ class MacroBuilder {
   }
 }
 
+class CoreTypes {
+  CoreTypes({required this.String});
+
+  final Identifier String;
+}
+
 /// a high level abstraction to build a class member
 abstract class ClassMember {
   /// the type of the member
-  String get type;
+  Identifier get type;
 
   /// the name of the member
   String get name;
@@ -59,16 +74,13 @@ abstract class ClassMember {
 class SimpleIdentifiedFieldMember implements ClassMember {
   /// creates a new [SimpleIdentifiedFieldMember] instance
   SimpleIdentifiedFieldMember({
-    required this.typeIdentifier,
+    required this.type,
     required this.name,
   });
   @override
   final String name;
   @override
-  String get type => typeIdentifier.name;
-
-  /// the [Identifier] type of the member
-  final Identifier typeIdentifier;
+  final Identifier type;
 
   @override
   String toString() => 'final $type $name;';
@@ -77,13 +89,13 @@ class SimpleIdentifiedFieldMember implements ClassMember {
     return DeclarationCode.fromParts([
       'final',
       ' ',
-      typeIdentifier,
+      type,
       ' ',
       name,
       ' ',
       '=',
       ' ',
-      typeIdentifier,
+      type,
       '()',
       ';',
     ]);
@@ -101,7 +113,7 @@ class FieldMember implements ClassMember {
   @override
   final String name;
   @override
-  final String type;
+  final Identifier type;
 
   /// the default value of the member
   final String value;
@@ -138,7 +150,7 @@ class MethodMember implements ClassMember {
   @override
   final String name;
   @override
-  final String type;
+  final Identifier type;
 
   /// the arguments of the method
   final String args;
