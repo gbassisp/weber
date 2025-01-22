@@ -12,7 +12,7 @@ void main() {
 
     test('has augmented methods', () {
       expectThat(c1).isNotNull;
-      expectThat(c1.hello).isNotNull;
+      expectThat((c1 as dynamic).hello).isNotNull;
     });
   });
 }
