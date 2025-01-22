@@ -1,6 +1,6 @@
 name: weber
 description: Yet another web framework for Dart.
-version: 0.0.1
+version: 0.0.1-alpha.1
 repository: https://github.com/gbassisp/weber
 homepage: https://github.com/gbassisp/weber
 
@@ -10,8 +10,9 @@ environment:
 # Add regular dependencies here.
 dependencies:
   json: ^0.20.4
-  lean_extensions: ^1.0.0
+  lean_extensions: ^1.5.0
   macros: ^0.1.3-main.0
+  meta: ^1.16.0
   shelf: ^1.0.0
 
 dev_dependencies:
