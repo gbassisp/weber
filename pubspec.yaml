@@ -5,7 +5,7 @@ repository: https://github.com/gbassisp/weber
 homepage: https://github.com/gbassisp/weber
 
 environment:
-  sdk: ^3.5.0-152
+  sdk: ^3.6.0
 
 # Add regular dependencies here.
 dependencies:

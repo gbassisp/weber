@@ -15,17 +15,21 @@ macro class Controller implements ClassDeclarationsMacro {
       name: 'serveGet',
       body: '''
 {
+  return $_quotedEndpoint;
+}
+''',
+  );
+  ClassMember _getEndpoint(MacroBuilder builder) => GetterMember(
+    type: builder.coreTypes.String,
+    name: 'endpoint',
+    body: '''
+{
 // macro is generated with a failing part directive analysis
 // ignore_for_file: non_part_of_directive_in_part
 
   return $_quotedEndpoint;
 }
 ''',
-  );
-  ClassMember _getControllerAttribute(MacroBuilder builder) => FieldMember(
-    type: builder.coreTypes.String,
-    name: 'endpoint',
-    value: _quotedEndpoint,
   );
   ClassMember _getControllerBase(Identifier controllerBase) => 
     SimpleIdentifiedFieldMember(
@@ -48,7 +52,7 @@ macro class Controller implements ClassDeclarationsMacro {
     macroBuilder
     ..addMember(_getServeGet(macroBuilder))
     // ..addMember(_getControllerBase(controller))
-    ..addMember(_getControllerAttribute(macroBuilder));
+    ..addMember(_getEndpoint(macroBuilder));
   }
 }
 
