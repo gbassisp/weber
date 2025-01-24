@@ -1,5 +1,6 @@
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:macros/macros.dart';
+import 'package:weber/src/experimental/type_identifiers.dart';
 
 /// create and load a [MacroBuilder] instance
 Future<MacroBuilder> loadMacroBuilder(
@@ -28,13 +29,14 @@ class MacroBuilder {
 
   Future<void> _loadCoreTypes() async {
     final core = Uri.parse('dart:core');
-    final String = await loadPackage(core, 'String');
-    _coreTypes = CoreTypes(String: String);
+    final string = await loadPackage(core, 'String');
+    coreTypes = CoreTypes(String: string);
   }
 
   List<String> _membersNames = [];
-  CoreTypes? _coreTypes;
-  CoreTypes get coreTypes => _coreTypes!;
+
+  /// the core types of dart
+  late final CoreTypes coreTypes;
 
   /// safely adds a new [ClassMember] to the class
   void addMember(ClassMember member) {
@@ -50,12 +52,6 @@ class MacroBuilder {
     // ignore: deprecated_member_use - unstable API
     return _builder.resolveIdentifier(uri, member);
   }
-}
-
-class CoreTypes {
-  CoreTypes({required this.String});
-
-  final Identifier String;
 }
 
 /// a high level abstraction to build a class member
@@ -98,6 +94,38 @@ class SimpleIdentifiedFieldMember implements ClassMember {
       type,
       '()',
       ';',
+    ]);
+  }
+}
+
+/// simple getter member
+class GetterMember implements ClassMember {
+  /// creates a new [GetterMember] instance
+  GetterMember({
+    required this.type,
+    required this.name,
+    required this.body,
+  });
+  @override
+  final String name;
+  @override
+  final Identifier type;
+
+  /// the body of the getter
+  final String body;
+
+  @override
+  String toString() => '$type get $name $body';
+  @override
+  DeclarationCode toDeclarationCode() {
+    return DeclarationCode.fromParts([
+      type,
+      ' ',
+      'get',
+      ' ',
+      name,
+      ' ',
+      body,
     ]);
   }
 }
