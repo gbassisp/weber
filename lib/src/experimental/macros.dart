@@ -13,7 +13,14 @@ macro class Controller implements ClassDeclarationsMacro {
   ClassMember _getServeGet(MacroBuilder builder) => MethodMember(
       type: builder.coreTypes.String, 
       name: 'serveGet',
-      body: '{return $_quotedEndpoint;}',
+      body: '''
+{
+// macro is generated with a failing part directive analysis
+// ignore_for_file: non_part_of_directive_in_part
+
+  return $_quotedEndpoint;
+}
+''',
   );
   ClassMember _getControllerAttribute(MacroBuilder builder) => FieldMember(
     type: builder.coreTypes.String,
