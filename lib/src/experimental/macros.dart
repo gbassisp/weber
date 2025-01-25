@@ -11,7 +11,7 @@ macro class Controller implements ClassDeclarationsMacro {
   final String _endpoint;
   String get _quotedEndpoint => '"$_endpoint"';
   ClassMember _getServeGet(MacroBuilder builder) => MethodMember(
-      type: builder.coreTypes.String, 
+      type: builder.coreTypes.$String, 
       name: 'serveGet',
       body: '''
 {
@@ -20,7 +20,7 @@ macro class Controller implements ClassDeclarationsMacro {
 ''',
   );
   ClassMember _getEndpoint(MacroBuilder builder) => GetterMember(
-    type: builder.coreTypes.String,
+    type: builder.coreTypes.$String,
     name: 'endpoint',
     body: '''
 {

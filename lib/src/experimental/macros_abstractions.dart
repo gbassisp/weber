@@ -28,9 +28,7 @@ class MacroBuilder {
   }
 
   Future<void> _loadCoreTypes() async {
-    final core = Uri.parse('dart:core');
-    final string = await loadPackage(core, 'String');
-    coreTypes = CoreTypes(String: string);
+    coreTypes = await CoreTypes.fromMacros(this);
   }
 
   List<String> _membersNames = [];
