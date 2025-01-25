@@ -23,6 +23,10 @@ void main() {
       expectThat(c1.endpoint).isNotNull;
     });
 
+    test('implements interface', () {
+      expectThat(c1).isA<Controller>();
+    });
+
     // test('has controller base', () {
     //   expectThat(c1.controller).isNotNull;
     // });
