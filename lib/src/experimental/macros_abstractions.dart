@@ -26,8 +26,8 @@ class MacroBuilder {
       final fields = await b.fieldsOf(_clazz);
       final fieldsString = fields.map((f) => f.identifier.name).toList();
       _membersNames = fieldsString;
-      await _loadCoreTypes();
     }
+    await _loadCoreTypes();
   }
 
   Future<void> _loadCoreTypes() async {
@@ -49,16 +49,17 @@ class MacroBuilder {
 
   /// loads a member from a package
   Future<Identifier?> tryLoadPackage(Uri uri, String member) async {
-    final b = _builder;
-    if (b is MemberDeclarationBuilder) {
-      return b.loadPackage(uri, member);
+    try {
+      return await _builder.loadPackage(uri, member);
+      // ignore: avoid_catches_without_on_clauses - this is a try method
+    } catch (_) {
+      return null;
     }
-    return null;
   }
 
   /// loads a member from a package
   Future<Identifier> loadPackage(Uri uri, String member) {
-    return tryLoadPackage(uri, member).then((value) => value!);
+    return _builder.loadPackage(uri, member);
   }
 }
 

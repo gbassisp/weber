@@ -62,7 +62,8 @@ macro class Controller implements ClassDeclarationsMacro, ClassTypesMacro {
     ClassDeclaration clazz, 
     ClassTypeBuilder builder,
   ) async {
-    final c = await builder.$ControllerBase;
+    final macroBuilder = await loadMacroBuilder(clazz, builder);
+    final c = macroBuilder.coreTypes.$ControllerBase;
     builder.appendInterfaces([NamedTypeAnnotationCode(name: c)]);
   }
 }

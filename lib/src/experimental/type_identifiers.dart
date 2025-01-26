@@ -15,6 +15,7 @@ class CoreTypes {
     required this.$bool,
     required this.$Map,
     // required this.$Response,
+    required this.$ControllerBase,
   });
 
   final Identifier $String;
@@ -24,6 +25,7 @@ class CoreTypes {
   final Identifier $bool;
   final Identifier $Map;
   // final Identifier $Response;
+  final Identifier $ControllerBase;
 
   static Future<CoreTypes> fromMacros(MacroBuilder builder) async {
     final futures = <Future<Identifier>>[
@@ -39,6 +41,10 @@ class CoreTypes {
       //   Uri.parse('package:shelf/src/response.dart'),
       //   'Response',
       // ),
+      builder.loadPackage(
+        Uri.parse('package:weber/src/stable/controller_base.dart'),
+        'ControllerBase',
+      ),
     ];
     final results = await Future.wait(futures);
     return CoreTypes(
@@ -49,6 +55,7 @@ class CoreTypes {
       $bool: results[4],
       $Map: results[5],
       // $Response: results[x],
+      $ControllerBase: results[6],
     );
   }
 
