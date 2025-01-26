@@ -24,12 +24,8 @@ void main() {
     });
 
     test('implements interface', () {
-      expectThat(c1).isA<Controller>();
+      expectThat(c1).isA<ControllerBase>();
     });
-
-    // test('has controller base', () {
-    //   expectThat(c1.controller).isNotNull;
-    // });
   });
 }
 
