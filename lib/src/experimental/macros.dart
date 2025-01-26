@@ -58,7 +58,10 @@ macro class Controller implements ClassDeclarationsMacro, ClassTypesMacro {
   }
 
   @override
-  FutureOr<void> buildTypesForClass(ClassDeclaration clazz, ClassTypeBuilder builder) async {
+  FutureOr<void> buildTypesForClass(
+    ClassDeclaration clazz, 
+    ClassTypeBuilder builder,
+  ) async {
     final c = await builder.$ControllerBase;
     builder.appendInterfaces([NamedTypeAnnotationCode(name: c)]);
   }

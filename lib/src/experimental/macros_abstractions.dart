@@ -51,8 +51,7 @@ class MacroBuilder {
   Future<Identifier?> tryLoadPackage(Uri uri, String member) async {
     final b = _builder;
     if (b is MemberDeclarationBuilder) {
-      // ignore: deprecated_member_use - unstable API
-      return b.resolveIdentifier(uri, member);
+      return b.loadPackage(uri, member);
     }
     return null;
   }
@@ -63,13 +62,16 @@ class MacroBuilder {
   }
 }
 
+@internal
 extension TypeLoadingExtensions on Builder {
   Future<Identifier> loadPackage(Uri uri, String member) async {
     final b = this;
     if (b is DeclarationBuilder) {
+      // ignore: deprecated_member_use - unstable API
       return b.resolveIdentifier(uri, member);
     }
     if (b is TypeBuilder) {
+      // ignore: deprecated_member_use - unstable API
       return b.resolveIdentifier(uri, member);
     }
     throw StateError('Builder is not a MemberDeclarationBuilder');
