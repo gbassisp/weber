@@ -1,11 +1,13 @@
 
+import 'dart:async';
+
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:macros/macros.dart';
 import 'package:weber/src/experimental/macros_abstractions.dart';
 
 final _controllerBase = Uri.parse('package:weber/src/stable/controller_base.dart');
 /// annotation to generate a controller class
-macro class Controller implements ClassDeclarationsMacro {
+macro class Controller implements ClassDeclarationsMacro, ClassTypesMacro {
   /// Creates a new [Controller] instance.
   const Controller([this._endpoint = string.empty]);
   final String _endpoint;
@@ -53,6 +55,12 @@ macro class Controller implements ClassDeclarationsMacro {
     ..addMember(_getServeGet(macroBuilder))
     // ..addMember(_getControllerBase(controller))
     ..addMember(_getEndpoint(macroBuilder));
+  }
+
+  @override
+  FutureOr<void> buildTypesForClass(ClassDeclaration clazz, ClassTypeBuilder builder) async {
+    final c = await builder.$ControllerBase;
+    builder.appendInterfaces([NamedTypeAnnotationCode(name: c)]);
   }
 }
 

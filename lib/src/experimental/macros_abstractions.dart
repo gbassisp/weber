@@ -1,11 +1,12 @@
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:macros/macros.dart';
+import 'package:meta/meta.dart';
 import 'package:weber/src/experimental/type_identifiers.dart';
 
 /// create and load a [MacroBuilder] instance
 Future<MacroBuilder> loadMacroBuilder(
   ClassDeclaration clazz,
-  MemberDeclarationBuilder builder,
+  Builder builder,
 ) async {
   final b = MacroBuilder._(clazz, builder);
   await b._load();
@@ -13,18 +14,20 @@ Future<MacroBuilder> loadMacroBuilder(
   return b;
 }
 
-/// a high level abstraction to delegate the building of a macro with easier
-/// to use methods
+@internal
 class MacroBuilder {
   MacroBuilder._(this._clazz, this._builder);
   final ClassDeclaration _clazz;
-  final MemberDeclarationBuilder _builder;
+  final Builder _builder;
 
   Future<void> _load() async {
-    final fields = await _builder.fieldsOf(_clazz);
-    final fieldsString = fields.map((f) => f.identifier.name).toList();
-    _membersNames = fieldsString;
-    await _loadCoreTypes();
+    final b = _builder;
+    if (b is MemberDeclarationBuilder) {
+      final fields = await b.fieldsOf(_clazz);
+      final fieldsString = fields.map((f) => f.identifier.name).toList();
+      _membersNames = fieldsString;
+      await _loadCoreTypes();
+    }
   }
 
   Future<void> _loadCoreTypes() async {
@@ -32,27 +35,55 @@ class MacroBuilder {
   }
 
   List<String> _membersNames = [];
-
-  /// the core types of dart
   late final CoreTypes coreTypes;
-
-  /// safely adds a new [ClassMember] to the class
   void addMember(ClassMember member) {
+    final b = _builder;
     if (_membersNames.contains(member.name)) {
       return;
     }
-    _membersNames.add(member.name);
-    _builder.declareInType(member.toDeclarationCode());
+    if (b is MemberDeclarationBuilder) {
+      _membersNames.add(member.name);
+      b.declareInType(member.toDeclarationCode());
+    }
+  }
+
+  /// loads a member from a package
+  Future<Identifier?> tryLoadPackage(Uri uri, String member) async {
+    final b = _builder;
+    if (b is MemberDeclarationBuilder) {
+      // ignore: deprecated_member_use - unstable API
+      return b.resolveIdentifier(uri, member);
+    }
+    return null;
   }
 
   /// loads a member from a package
   Future<Identifier> loadPackage(Uri uri, String member) {
-    // ignore: deprecated_member_use - unstable API
-    return _builder.resolveIdentifier(uri, member);
+    return tryLoadPackage(uri, member).then((value) => value!);
   }
 }
 
-/// a high level abstraction to build a class member
+extension TypeLoadingExtensions on Builder {
+  Future<Identifier> loadPackage(Uri uri, String member) async {
+    final b = this;
+    if (b is DeclarationBuilder) {
+      return b.resolveIdentifier(uri, member);
+    }
+    if (b is TypeBuilder) {
+      return b.resolveIdentifier(uri, member);
+    }
+    throw StateError('Builder is not a MemberDeclarationBuilder');
+  }
+
+  Future<Identifier> get $ControllerBase async {
+    return loadPackage(
+      Uri.parse('package:weber/src/stable/controller_base.dart'),
+      'ControllerBase',
+    );
+  }
+}
+
+@internal
 abstract class ClassMember {
   /// the type of the member
   Identifier get type;
