@@ -13,6 +13,8 @@ class CoreTypes {
     required this.$double,
     required this.$num,
     required this.$bool,
+    required this.$Map,
+    // required this.$Response,
   });
 
   final Identifier $String;
@@ -20,6 +22,8 @@ class CoreTypes {
   final Identifier $double;
   final Identifier $num;
   final Identifier $bool;
+  final Identifier $Map;
+  // final Identifier $Response;
 
   static Future<CoreTypes> fromMacros(MacroBuilder builder) async {
     final futures = <Future<Identifier>>[
@@ -28,6 +32,13 @@ class CoreTypes {
       builder.loadPackage(Uri.parse('dart:core'), 'double'),
       builder.loadPackage(Uri.parse('dart:core'), 'num'),
       builder.loadPackage(Uri.parse('dart:core'), 'bool'),
+      builder.loadPackage(Uri.parse('dart:core'), 'Map'),
+      // TODO(gbassisp): load from third party package when this is fixed:
+      // https://github.com/dart-lang/sdk/issues/55910
+      // builder.loadPackage(
+      //   Uri.parse('package:shelf/src/response.dart'),
+      //   'Response',
+      // ),
     ];
     final results = await Future.wait(futures);
     return CoreTypes(
@@ -36,6 +47,8 @@ class CoreTypes {
       $double: results[2],
       $num: results[3],
       $bool: results[4],
+      $Map: results[5],
+      // $Response: results[x],
     );
   }
 
