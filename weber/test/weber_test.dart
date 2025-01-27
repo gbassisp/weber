@@ -2,9 +2,12 @@
 // macros fail. This will give better feedback to the user.
 // ignore_for_file: avoid_dynamic_calls
 
+// type checking is part of the tests
+// ignore_for_file: unnecessary_type_check
+
 import 'package:expector/expector.dart';
 import 'package:test/test.dart';
-import '../lib/weber.dart';
+import 'package:weber/weber.dart';
 
 void main() {
   group('macros', () {
@@ -24,7 +27,7 @@ void main() {
     });
 
     test('implements interface', () {
-      expectThat(c1).isA<ControllerBase>();
+      expectThat(c1 is ControllerBase).isTrue;
     });
   });
 }
