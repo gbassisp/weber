@@ -3,7 +3,7 @@
 
 import 'package:macros/macros.dart';
 import 'package:meta/meta.dart';
-import 'package:weber/src/experimental/macros_abstractions.dart';
+import 'macros_abstractions.dart';
 
 @internal
 class CoreTypes {

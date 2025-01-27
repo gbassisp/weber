@@ -4,7 +4,7 @@
 
 import 'package:expector/expector.dart';
 import 'package:test/test.dart';
-import 'package:weber/weber.dart';
+import '../lib/weber.dart';
 
 void main() {
   group('macros', () {

@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:macros/macros.dart';
-import 'package:weber/src/experimental/macros_abstractions.dart';
+import 'macros_abstractions.dart';
 
 final _controllerBase = Uri.parse('package:weber/src/stable/controller_base.dart');
 /// annotation to generate a controller class

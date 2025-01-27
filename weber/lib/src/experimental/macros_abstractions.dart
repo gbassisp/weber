@@ -1,7 +1,7 @@
 import 'package:lean_extensions/dart_essentials.dart';
 import 'package:macros/macros.dart';
 import 'package:meta/meta.dart';
-import 'package:weber/src/experimental/type_identifiers.dart';
+import 'type_identifiers.dart';
 
 /// create and load a [MacroBuilder] instance
 Future<MacroBuilder> loadMacroBuilder(
