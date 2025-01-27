@@ -29,6 +29,10 @@ void main() {
     test('implements interface', () {
       expectThat(c1 is ControllerBase).isTrue;
     });
+
+    test('has default implementation from mixin', () {
+      expectThat(c1.normalizedEndpoint).equals('${c1.endpoint}/');
+    });
   });
 }
 

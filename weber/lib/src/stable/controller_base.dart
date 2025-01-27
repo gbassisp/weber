@@ -1,12 +1,18 @@
 // import 'package:shelf/shelf.dart';
 
 /// a wrapper for the shelf package
-class ControllerBase {
-  /// creates a new instance of [ControllerBase]
-  ControllerBase();
-  // final Handler _handler = Handler();
+mixin ControllerBase {
+  // implemented by macro:
 
-  // Future<Response> handle(Request request) async {
-  //   return await _handler(request);
-  // }
+  /// the endpoint of the controller
+  String get endpoint;
+
+  /// temporary method for experimentation
+  String serveGet();
+
+  // concrete methods:
+
+  /// the normalized endpoint of the controller
+  String get normalizedEndpoint =>
+      endpoint.endsWith('/') ? endpoint : '$endpoint/';
 }
